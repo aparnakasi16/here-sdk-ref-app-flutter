@@ -254,43 +254,46 @@ class _NavigationScreenState extends State<NavigationScreen>
         MapMeasure(MapMeasureKind.distance, _kInitDistanceToEarth),
       );
 
-      hereMapController.setWatermarkLocation(
-        Anchor2D.withHorizontalAndVertical(0, 1),
-        Point2D(
-          -hereMapController.watermarkSize.width / 2,
-          -hereMapController.watermarkSize.height / 2,
-        ),
-      );
+      // hereMapController.setWatermarkLocation(
+      //   Anchor2D.withHorizontalAndVertical(0, 1),
+      //   Point2D(
+      //     -hereMapController.watermarkSize.width / 2,
+      //     -hereMapController.watermarkSize.height / 2,
+      //   ),
+      // );
 
       Util.setTrafficLayersVisibilityOnMap(context, hereMapController);
 
       _addRouteToMap();
-      bool? result = await Dialogs.askForPositionSource(context);
-      if (result == null) {
-        // Nothing answered. Go back.
-        Navigator.of(context).pop();
-        return;
-      }
-
-      if (result) {
-        _shouldMonitorPositioning = false;
-        _startPositioning(
-          context,
-          simulated: true,
-          options: Navigation.LocationSimulatorOptions()
-            ..speedFactor = _kSpeedFactor
-            ..notificationInterval = Duration(milliseconds: _kNotificationIntervalInMilliseconds),
-        );
-      } else {
-        _shouldMonitorPositioning = true;
+       _shouldMonitorPositioning = true;
         _initialiseUserPositioning();
         _startPositioning(context);
-      }
+      // bool? result = false;
+      // if (result == null) {
+      //   // Nothing answered. Go back.
+      //   Navigator.of(context).pop();
+      //   return;
+      // }
+
+      // if (result) {
+      //   _shouldMonitorPositioning = false;
+      //   _startPositioning(
+      //     context,
+      //     simulated: true,
+      //     options: Navigation.LocationSimulatorOptions()
+      //       ..speedFactor = _kSpeedFactor
+      //       ..notificationInterval = Duration(milliseconds: _kNotificationIntervalInMilliseconds),
+      //   );
+      // } else {
+      //   _shouldMonitorPositioning = true;
+      //   _initialiseUserPositioning();
+      //   _startPositioning(context);
+      // }
 
       // on realtime locations, and platform is Android,
       // check if battery saver is on, which might effect the
       // navigation
-      _checkDeviceBatteryStatus(context, isRealTimeNavigation: !result);
+      _checkDeviceBatteryStatus(context, isRealTimeNavigation: true);
       _startNavigation();
       _addGestureListeners();
     };
@@ -672,12 +675,12 @@ class _NavigationScreenState extends State<NavigationScreen>
   }
 
   void _setupLogoAndPrincipalPointPosition() {
-    final int margin = _currentStreetName != null ? (_kHereLogoOffset * _hereMapController.pixelScale).truncate() : 0;
+    // final int margin = _currentStreetName != null ? (_kHereLogoOffset * _hereMapController.pixelScale).truncate() : 0;
 
-    _hereMapController.setWatermarkLocation(
-      Anchor2D.withHorizontalAndVertical(0.5, 1),
-      Point2D(0, -(_hereMapController.watermarkSize.height / 2) - margin),
-    );
+    // _hereMapController.setWatermarkLocation(
+    //   Anchor2D.withHorizontalAndVertical(0.5, 1),
+    //   Point2D(0, -(_hereMapController.watermarkSize.height / 2) - margin),
+    // );
 
     _hereMapController.camera.principalPoint = Point2D(_hereMapController.viewportSize.width / 2,
         _hereMapController.viewportSize.height - _kPrincipalPointOffset * _hereMapController.pixelScale);

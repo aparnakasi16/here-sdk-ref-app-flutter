@@ -187,13 +187,13 @@ class _RouteWayPointsState extends State<RouteWayPoints> {
       ),
     );
 
-    widget.hereMapController.setWatermarkLocation(
-      Anchor2D.withHorizontalAndVertical(0, 1),
-      Point2D(
-        -widget.hereMapController.watermarkSize.width / 2,
-        -widget.hereMapController.watermarkSize.height / 2,
-      ),
-    );
+    // widget.hereMapController.setWatermarkLocation(
+    //   Anchor2D.withHorizontalAndVertical(0, 1),
+    //   Point2D(
+    //     -widget.hereMapController.watermarkSize.width / 2,
+    //     -widget.hereMapController.watermarkSize.height / 2,
+    //   ),
+    // );
     widget.controller.value = wayPoints;
   }
 }

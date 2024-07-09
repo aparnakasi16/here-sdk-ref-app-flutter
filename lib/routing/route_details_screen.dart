@@ -96,7 +96,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
     final deviceHeight = MediaQuery.of(context).size.height;
     _addRouteToMap();
     _updatePrincipalPoint(bottomPanelHeight: deviceHeight * _minBottomSheetExtent);
-    _updateWatermarkPosition(margin: _minBottomSheetExtent);
+    // _updateWatermarkPosition(margin: _minBottomSheetExtent);
     // Implementing the tap listener to enable zooming into the selected maneuver.
     _setTapGestureHandler();
   }
@@ -148,12 +148,12 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
     }
   }
 
-  void _updateWatermarkPosition({required double margin}) {
-    _hereMapController.setWatermarkLocation(
-      Anchor2D.withHorizontalAndVertical(1, 1 - margin),
-      Point2D(0, -_hereMapController.watermarkSize.height / 2),
-    );
-  }
+  // void _updateWatermarkPosition({required double margin}) {
+  //   // _hereMapController.setWatermarkLocation(
+  //   //   Anchor2D.withHorizontalAndVertical(1, 1 - margin),
+  //   //   Point2D(0, -_hereMapController.watermarkSize.height / 2),
+  //   // );
+  // }
 
   void _addRouteToMap() {
     _mapRoute = MapPolyline.withRepresentation(widget.route.geometry, mapRouteRepresentation());
@@ -208,10 +208,10 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
   void _resetIfBottomSheetIsExpanded() {
     if (_maneuversSheetIsExpanded) {
       DraggableScrollableActuator.reset(_bottomSheetKey.currentContext!);
-      _hereMapController.setWatermarkLocation(
-        Anchor2D.withHorizontalAndVertical(1, 1),
-        Point2D(0, -_hereMapController.watermarkSize.height / 2),
-      );
+      // _hereMapController.setWatermarkLocation(
+      //   Anchor2D.withHorizontalAndVertical(1, 1),
+      //   Point2D(0, -_hereMapController.watermarkSize.height / 2),
+      // );
     }
   }
 
@@ -241,7 +241,7 @@ class _RouteDetailsScreenState extends State<RouteDetailsScreen> {
                   final deviceHeight = MediaQuery.of(context).size.height;
                   _updateCamera(bottomPanelHeight: deviceHeight * notification.extent);
                   _updatePrincipalPoint(bottomPanelHeight: deviceHeight * notification.extent);
-                  _updateWatermarkPosition(margin: notification.extent);
+                  // _updateWatermarkPosition(margin: notification.extent);
                 });
               });
               return true;

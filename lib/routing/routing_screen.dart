@@ -169,11 +169,14 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
           ),
           extendBodyBehindAppBar: true,
           bottomNavigationBar: _mapInitSuccess ? _buildBottomNavigationBar(context) : null,
+   
+          
           floatingActionButton: enableMapUpdate && _mapInitSuccess
               ? null
               : ResetLocationButton(
                   onPressed: _resetCurrentPosition,
                 ),
+              
         ),
         if (_routingInProgress)
           Container(
@@ -199,13 +202,13 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
 
       Util.setTrafficLayersVisibilityOnMap(context, hereMapController);
 
-      hereMapController.setWatermarkLocation(
-        Anchor2D.withHorizontalAndVertical(0, 1),
-        Point2D(
-          -hereMapController.watermarkSize.width / 2,
-          -hereMapController.watermarkSize.height / 2,
-        ),
-      );
+      // hereMapController.setWatermarkLocation(
+      //   Anchor2D.withHorizontalAndVertical(0, 1),
+      //   Point2D(
+      //     -hereMapController.watermarkSize.width / 2,
+      //     -hereMapController.watermarkSize.height / 2,
+      //   ),
+      // );
 
       hereMapController.camera.lookAtPointWithGeoOrientationAndMeasure(
         widget.currentPosition,
@@ -249,6 +252,8 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
     _hereMapController.gestures.longPressListener = LongPressListener((state, point) {
       if (state == GestureState.begin) {
         _showWayPointPopup(point);
+        debugPrint('Loggg heree: $point');
+        
       }
     });
   }
@@ -332,12 +337,13 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
 
   void _showWayPointPopup(Point2D point) {
     _dismissWayPointPopup();
+        debugPrint('Loggg heree: $point');
     GeoCoordinates? coordinates = _hereMapController.viewToGeoCoordinates(point);
 
     if (coordinates == null) {
       return;
     }
-
+   debugPrint('Loggg cordinates: $GeoCoordinates');
     _hereMapController.pinWidget(
       PlaceActionsPopup(
         coordinates: coordinates,

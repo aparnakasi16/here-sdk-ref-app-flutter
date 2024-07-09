@@ -34,18 +34,18 @@ Future<bool?> askForPositionSource(BuildContext context) async {
     builder: (context) => SimpleDialog(
       title: Text(appLocalizations.selectPositioningDialogTitle),
       children: [
-        SimpleDialogOption(
-          child: ListTile(
-            leading: SvgPicture.asset(
-              "assets/route.svg",
-              colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSecondary, BlendMode.srcIn),
-              width: UIStyle.mediumIconSize,
-              height: UIStyle.mediumIconSize,
-            ),
-            title: Text(appLocalizations.simulatedLocationSourceTitle),
-          ),
-          onPressed: () => Navigator.of(context).pop(true),
-        ),
+        // SimpleDialogOption(
+        //   child: ListTile(
+        //     leading: SvgPicture.asset(
+        //       "assets/route.svg",
+        //       colorFilter: ColorFilter.mode(Theme.of(context).colorScheme.onSecondary, BlendMode.srcIn),
+        //       width: UIStyle.mediumIconSize,
+        //       height: UIStyle.mediumIconSize,
+        //     ),
+        //     title: Text(appLocalizations.simulatedLocationSourceTitle),
+        //   ),
+        //   onPressed: () => Navigator.of(context).pop(true),
+        // ),
         SimpleDialogOption(
           child: ListTile(
             leading: Icon(Icons.gps_fixed),

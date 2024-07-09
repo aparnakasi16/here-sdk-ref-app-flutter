@@ -85,21 +85,21 @@ class _DraggablePopupHereLogoHelperState extends State<DraggablePopupHereLogoHel
     final double height = MediaQuery.of(context).size.height;
     final double popupHeight = height * extent;
     final RenderBox box = widget.hereMapKey.currentContext!.findRenderObject() as RenderBox;
-    final double margin = (popupHeight - (height - box.paintBounds.bottom)) * widget.hereMapController.pixelScale;
+    // final double margin = (popupHeight - (height - box.paintBounds.bottom)) * widget.hereMapController.pixelScale;
 
-    if (margin >= 0) {
-      widget.hereMapController.setWatermarkLocation(
-        Anchor2D.withHorizontalAndVertical(0.5, 1),
-        Point2D(0, -(widget.hereMapController.watermarkSize.height / 2) - margin.truncate()),
-      );
-    } else {
-      widget.hereMapController.setWatermarkLocation(
-        Anchor2D.withHorizontalAndVertical(0, 1),
-        Point2D(
-          -widget.hereMapController.watermarkSize.width / 2,
-          -widget.hereMapController.watermarkSize.height / 2,
-        ),
-      );
-    }
+    // if (margin >= 0) {
+    //   widget.hereMapController.setWatermarkLocation(
+    //     Anchor2D.withHorizontalAndVertical(0.5, 1),
+    //     Point2D(0, -(widget.hereMapController.watermarkSize.height / 2) - margin.truncate()),
+    //   );
+    // } else {
+    //   widget.hereMapController.setWatermarkLocation(
+    //     Anchor2D.withHorizontalAndVertical(0, 1),
+    //     Point2D(
+    //       -widget.hereMapController.watermarkSize.width / 2,
+    //       -widget.hereMapController.watermarkSize.height / 2,
+    //     ),
+    //   );
+    // }
   }
 }

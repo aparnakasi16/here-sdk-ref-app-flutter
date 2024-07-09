@@ -75,13 +75,13 @@ Future<SearchResult?> showSearchPopup({
       ),
     ),
   ).then((value) {
-    hereMapController.setWatermarkLocation(
-      Anchor2D.withHorizontalAndVertical(0, 1),
-      Point2D(
-        -hereMapController.watermarkSize.width / 2,
-        -hereMapController.watermarkSize.height / 2,
-      ),
-    );
+    // hereMapController.setWatermarkLocation(
+    //   Anchor2D.withHorizontalAndVertical(0, 1),
+    //   Point2D(
+    //     -hereMapController.watermarkSize.width / 2,
+    //     -hereMapController.watermarkSize.height / 2,
+    //   ),
+    // );
 
     return value;
   });
@@ -290,7 +290,7 @@ class _SearchPopupState extends State<_SearchPopup> {
 
     if (highlights == null) {
       result.add(TextSpan(
-        text: text,
+        text: 'Alexi Saldamando',
       ));
     } else {
       int lastPosition = 0;
@@ -560,6 +560,7 @@ class _SearchPopupState extends State<_SearchPopup> {
 
   Future _showSearchResults(
       BuildContext context, String? queryString, List<Place> places, bool isRecentSearchResult) async {
+        // final
     final result = await Navigator.of(context).pushNamed(
       SearchResultsScreen.navRoute,
       arguments: [queryString ?? "", places, _lastPosition, isRecentSearchResult],

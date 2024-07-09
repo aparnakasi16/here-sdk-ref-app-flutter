@@ -19,7 +19,7 @@
 
 import 'dart:async';
 import 'dart:io';
-
+import 'dart:developer';
 import 'package:RefApp/common/extensions/error_handling/map_loader_error_extension.dart';
 import 'package:RefApp/common/file_utility.dart';
 import 'package:RefApp/routing/routing_screen.dart';
@@ -53,7 +53,6 @@ import 'positioning/positioning.dart';
 import 'positioning/positioning_engine.dart';
 import 'routing/waypoint_info.dart';
 import 'search/search_popup.dart';
-
 /// The home screen of the application.
 class LandingScreen extends StatefulWidget {
   static const String navRoute = "/";
@@ -62,17 +61,23 @@ class LandingScreen extends StatefulWidget {
 
   @override
   _LandingScreenState createState() => _LandingScreenState();
+
 }
+
+
 
 class _LandingScreenState extends State<LandingScreen> with Positioning, WidgetsBindingObserver {
   static const int _kLocationWarningDismissPeriod = 5; // seconds
   static const int _kLoadCustomStyleResultPopupDismissPeriod = 5; // seconds
-
+  static const String _fromAddress = '627 Vallejo St, San Francisco, CA 94133-3918, United States';
   bool _mapInitSuccess = false;
   bool _didBackPressedAndPositionStopped = false;
+  final GlobalKey _bottomBarKey = GlobalKey();
+  static const double _kPlaceCardHeight = 80;
   late HereMapController _hereMapController;
   late PositioningEngine _positioningEngine;
   GlobalKey _hereMapKey = GlobalKey();
+  late TabController _tabController;
   OverlayEntry? _locationWarningOverlay;
   OverlayEntry? _loadCustomSceneResultOverlay;
   ConsentUserReply? _consentState;
@@ -84,6 +89,12 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+       WidgetsBinding.instance.addPostFrameCallback((_) {
+       Future.delayed(Duration(seconds: 1), () =>  _showRoutingScreen( 
+                  WayPointInfo.withCoordinates(
+                  coordinates:GeoCoordinates(37.7749, -122.4194),
+                )));
+    });
   }
 
   @override
@@ -128,14 +139,18 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
       child: Consumer2<AppPreferences, CustomMapStyleSettings>(
         builder: (context, preferences, customStyleSettings, child) => Scaffold(
           resizeToAvoidBottomInset: false,
-          body: Stack(
+          body: 
+          Stack(
             children: [
               HereMap(
                 key: _hereMapKey,
                 options: options,
                 onMapCreated: _onMapCreated,
               ),
+              // _onSearch(context),
+              // _buildSearchSection(),
               _buildMenuButton(),
+              // _onSearch(context)
             ],
           ),
           floatingActionButton: _mapInitSuccess ? _buildFAB(context) : null,
@@ -149,8 +164,8 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
 
   void _onMapCreated(HereMapController hereMapController) {
     _hereMapController = hereMapController;
-
-    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.normalDay, (MapError? error) {
+    // MapScheme mapScheme = MapScheme.normalDay;
+    hereMapController.mapScene.loadSceneForMapScheme(MapScheme.liteDay, (MapError? error) {
       if (error != null) {
         print('Map scene not loaded. MapError: ${error.toString()}');
         return;
@@ -169,9 +184,10 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
           MapMeasure(MapMeasureKind.distance, Positioning.initDistanceToEarth),
         );
       }
-
+      _hereMapController.mapScene.enableFeatures({MapFeatures.buildingFootprints: MapFeatureModes.extrudedBuildingsAll});
+      _hereMapController.mapScene.enableFeatures({MapFeatures.terrain: MapFeatureModes.terrain3d});
       hereMapController.setWatermarkLocation(
-        Anchor2D.withHorizontalAndVertical(0, 1),
+        Anchor2D.withHorizontalAndVertical(-1, 0),
         Point2D(
           -hereMapController.watermarkSize.width / 2,
           -hereMapController.watermarkSize.height / 2,
@@ -191,6 +207,40 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
         _mapInitSuccess = true;
       });
     });
+  }
+
+
+ void _onSearch(BuildContext context) async {
+    GeoCoordinates currentPosition = _hereMapController.camera.state.targetCoordinates;
+           debugPrint('Loggg hereee');
+    final SearchResult? result = await showSearchPopup(
+      context: context,
+      currentPosition: currentPosition,
+      hereMapController: _hereMapController,
+      hereMapKey: _hereMapKey,
+    );
+    if (result != null) {
+      SearchResult searchResult = result;
+      log('Logggg Place: ${searchResult.place}');
+      assert(searchResult.place != null);
+      _showRoutingScreen(WayPointInfo.withPlace(
+        place: searchResult.place,
+      ));
+    }
+  }
+
+ Widget _buildBottomNavigationBar(BuildContext context) {
+    return BottomAppBar(
+      key: _bottomBarKey,
+      color: Theme.of(context).colorScheme.surface,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // _buildNavigationHeader(context, false),
+          // _buildPlacesTabs(context),
+        ],
+      ),
+    );
   }
 
   Widget _buildMenuButton() {
@@ -364,11 +414,11 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
                 ),
                 child: Row(
                   children: [
-                    SvgPicture.asset(
-                      "assets/app_logo.svg",
-                      width: UIStyle.drawerLogoSize,
-                      height: UIStyle.drawerLogoSize,
-                    ),
+                    // SvgPicture.asset(
+                    //   "assets/app_logo.svg",
+                    //   width: UIStyle.drawerLogoSize,
+                    //   height: UIStyle.drawerLogoSize,
+                    // ),
                     SizedBox(
                       width: UIStyle.contentMarginMedium,
                     ),
@@ -377,15 +427,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
                       builder: (_, snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.done:
-                            String title = Util.formatString(
-                              appLocalizations.appTitleHeader,
-                              [
-                                snapshot.data?.version ?? '',
-                                SDKBuildInformation.sdkVersion().versionGeneration,
-                                SDKBuildInformation.sdkVersion().versionMajor,
-                                SDKBuildInformation.sdkVersion().versionMinor,
-                              ],
-                            );
+                            String title = 'ArcOMDriver';
                             return Expanded(
                               child: Text(
                                 title,
@@ -420,7 +462,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
                     ..pop()
                     ..pushNamed(DownloadMapsScreen.navRoute);
                 }),
-            ..._buildLoadCustomSceneItem(context),
+            // ..._buildLoadCustomSceneItem(context),
             SwitchListTile(
               title: Text(
                 appLocalizations.useMapOfflineSwitch,
@@ -530,7 +572,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
     _dismissWayPointPopup();
     GeoCoordinates coordinates =
         _hereMapController.viewToGeoCoordinates(point) ?? _hereMapController.camera.state.targetCoordinates;
-
+      debugPrint('Geocordinate: $GeoCoordinates');
     _hereMapController.pinWidget(
       PlaceActionsPopup(
         coordinates: coordinates,
@@ -550,7 +592,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
           _showRoutingScreen(place != null
               ? WayPointInfo.withPlace(
                   place: place,
-                  originalCoordinates: coordinates,
+                  originalCoordinates:coordinates,
                 )
               : WayPointInfo.withCoordinates(
                   coordinates: coordinates,
@@ -654,25 +696,10 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
     _loadCustomSceneResultOverlay = null;
   }
 
-  void _onSearch(BuildContext context) async {
-    GeoCoordinates currentPosition = _hereMapController.camera.state.targetCoordinates;
-
-    final SearchResult? result = await showSearchPopup(
-      context: context,
-      currentPosition: currentPosition,
-      hereMapController: _hereMapController,
-      hereMapKey: _hereMapKey,
-    );
-    if (result != null) {
-      SearchResult searchResult = result;
-      assert(searchResult.place != null);
-      _showRoutingScreen(WayPointInfo.withPlace(
-        place: searchResult.place,
-      ));
-    }
-  }
+ 
 
   void _showRoutingScreen(WayPointInfo destination) async {
+    debugPrint('destination val $destination');
     final GeoCoordinates currentPosition =
         lastKnownLocation != null ? lastKnownLocation!.coordinates : Positioning.initPosition;
 

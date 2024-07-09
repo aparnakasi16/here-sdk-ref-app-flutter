@@ -457,12 +457,12 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> with TickerPr
       ),
     );
 
-    _hereMapController.setWatermarkLocation(
-      Anchor2D.withHorizontalAndVertical(0, 1),
-      Point2D(
-        -_hereMapController.watermarkSize.width / 2,
-        -_hereMapController.watermarkSize.height / 2,
-      ),
-    );
+    // _hereMapController.setWatermarkLocation(
+    //   Anchor2D.withHorizontalAndVertical(0, 1),
+    //   Point2D(
+    //     -_hereMapController.watermarkSize.width / 2,
+    //     -_hereMapController.watermarkSize.height / 2,
+    //   ),
+    // );
   }
 }

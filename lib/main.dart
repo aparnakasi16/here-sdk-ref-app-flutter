@@ -50,11 +50,13 @@ import 'search/search_results_screen.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   SdkContext.init();
-
+  String accessKeyId = "AtIV7Fa1sB0o3aZ5USzWcQ";
+  String accessKeySecret = "QFZlGYgq_GoxzFAYdu5v6wyB-GyMXKNCnBiFmny2qCJrgBMEJ11sIxFkqEKCZ22N2vFdjR4BegF7vgYs3kt6qw";
   _createSDKNativeEngine(
+
     sdkOptions: SDKOptions.withAccessKeySecret(
-      Environment.accessKeyId,
-      Environment.accessKeySecret,
+      accessKeyId,
+      accessKeySecret,
     ),
     onSuccess: () => runApp(MyApp()),
     onFailure: (_) => runApp(const InitErrorScreen()),
@@ -102,6 +104,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (context) => CustomMapStyleSettings()),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         localizationsDelegates: [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
