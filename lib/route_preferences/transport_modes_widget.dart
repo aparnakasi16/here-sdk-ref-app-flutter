@@ -25,10 +25,10 @@ import '../common/ui_style.dart';
 /// Available transport modes currently supported by the Ref App.
 /// The HERE SDK supports more transport modes than featured by this application.
 enum TransportModes {
-  car,
+  // car,
   truck,
-  scooter,
-  walk,
+  // scooter,
+  // walk,
 }
 
 /// Widget for switching between transport modes.
@@ -75,14 +75,14 @@ class TransportModesWidget extends StatelessWidget {
 extension _TransportModeIcon on TransportModes {
   String get icon {
     switch (this) {
-      case TransportModes.car:
-        return "assets/car.svg";
+      // case TransportModes.car:
+      //   return "assets/car.svg";
       case TransportModes.truck:
         return "assets/truck.svg";
-      case TransportModes.scooter:
-        return "assets/scooter.svg";
-      case TransportModes.walk:
-        return "assets/walk.svg";
+      // case TransportModes.scooter:
+      //   return "assets/scooter.svg";
+      // case TransportModes.walk:
+      //   return "assets/walk.svg";
     }
   }
 }

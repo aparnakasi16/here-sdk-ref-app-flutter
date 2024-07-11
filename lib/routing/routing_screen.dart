@@ -506,30 +506,30 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
               ),
             ],
           ),
-          _buildTransportTypeWidget(context),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              RoutePoiOptionsButton(
-                categoryIds: _poiCategories,
-                onChanged: (categoryIds) {
-                  setState(() => _poiCategories = categoryIds);
-                  _routePoiHandler.categories = categoryIds.toList();
-                  if (_routes.isNotEmpty) {
-                    _routePoiHandler.updatePoiForRoute(_routes[_selectedRouteIndex]);
-                  }
-                },
-              ),
-              Spacer(),
-              TextButton(
-                child: Text(
-                  AppLocalizations.of(context)!.preferencesTitle,
-                  style: TextStyle(color: colorScheme.secondary),
-                ),
-                onPressed: () => _awaitOptionsFromPreferenceScreen(context),
-              ),
-            ],
-          ),
+          // _buildTransportTypeWidget(context),
+          // Row(
+          //   mainAxisSize: MainAxisSize.max,
+          //   children: [
+          //     RoutePoiOptionsButton(
+          //       categoryIds: _poiCategories,
+          //       onChanged: (categoryIds) {
+          //         setState(() => _poiCategories = categoryIds);
+          //         _routePoiHandler.categories = categoryIds.toList();
+          //         if (_routes.isNotEmpty) {
+          //           _routePoiHandler.updatePoiForRoute(_routes[_selectedRouteIndex]);
+          //         }
+          //       },
+          //     ),
+          //     Spacer(),
+          //     TextButton(
+          //       child: Text(
+          //         AppLocalizations.of(context)!.preferencesTitle,
+          //         style: TextStyle(color: colorScheme.secondary),
+          //       ),
+          //       onPressed: () => _awaitOptionsFromPreferenceScreen(context),
+          //     ),
+          //   ],
+          // ),
           Container(
             width: double.infinity,
             height: _kRouteCardHeight,
@@ -567,19 +567,19 @@ class _RoutingScreenState extends State<RoutingScreen> with TickerProviderStateM
     RoutePreferencesModel preferences = Provider.of<RoutePreferencesModel>(context, listen: false);
 
     switch (_transportModes[_transportModesTabController.index]) {
-      case TransportModes.car:
-        _routingEngine.calculateCarRoute(_wayPointsController.value, preferences.carOptions, _onRoutingEnd);
-        break;
+      // case TransportModes.car:
+      //   _routingEngine.calculateCarRoute(_wayPointsController.value, preferences.carOptions, _onRoutingEnd);
+      //   break;
       case TransportModes.truck:
         _routingEngine.calculateTruckRoute(_wayPointsController.value, preferences.truckOptions, _onRoutingEnd);
         break;
-      case TransportModes.scooter:
-        _routingEngine.calculateScooterRoute(_wayPointsController.value, preferences.scooterOptions, _onRoutingEnd);
-        break;
-      case TransportModes.walk:
-        _routingEngine.calculatePedestrianRoute(
-            _wayPointsController.value, preferences.pedestrianOptions, _onRoutingEnd);
-        break;
+      // case TransportModes.scooter:
+      //   _routingEngine.calculateScooterRoute(_wayPointsController.value, preferences.scooterOptions, _onRoutingEnd);
+      //   break;
+      // case TransportModes.walk:
+      //   _routingEngine.calculatePedestrianRoute(
+      //       _wayPointsController.value, preferences.pedestrianOptions, _onRoutingEnd);
+      //   break;
     }
   }
 

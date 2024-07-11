@@ -20,6 +20,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:developer';
+import 'dart:convert';
 import 'package:RefApp/common/extensions/error_handling/map_loader_error_extension.dart';
 import 'package:RefApp/common/file_utility.dart';
 import 'package:RefApp/routing/routing_screen.dart';
@@ -37,7 +38,8 @@ import 'package:here_sdk/mapview.dart';
 import 'package:here_sdk/search.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
-
+import 'route_model.dart';
+import 'package:http/http.dart' as http;
 import 'common/application_preferences.dart';
 import 'common/connection_state_monitor.dart';
 import 'common/custom_map_style_settings.dart';
@@ -53,11 +55,22 @@ import 'positioning/positioning.dart';
 import 'positioning/positioning_engine.dart';
 import 'routing/waypoint_info.dart';
 import 'search/search_popup.dart';
+import 'package:flutter/services.dart' show PlatformException;
+import 'package:uni_links/uni_links.dart';
+
+
 /// The home screen of the application.
 class LandingScreen extends StatefulWidget {
   static const String navRoute = "/";
+   final String routeIdParam;
+   
 
-  LandingScreen({Key? key}) : super(key: key);
+  LandingScreen({
+    Key? key,
+    required this.routeIdParam,
+    }) : super(key: key);
+
+  
 
   @override
   _LandingScreenState createState() => _LandingScreenState();
@@ -84,17 +97,65 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
   MapMarker? _routeFromMarker;
   Place? _routeFromPlace;
   MapCameraState? _cameraState;
+    StreamSubscription? _sub;
+
 
   @override
   void initState() {
     super.initState();
+      initUniLinks();
     WidgetsBinding.instance.addObserver(this);
        WidgetsBinding.instance.addPostFrameCallback((_) {
-       Future.delayed(Duration(seconds: 1), () =>  _showRoutingScreen( 
-                  WayPointInfo.withCoordinates(
-                  coordinates:GeoCoordinates(37.7749, -122.4194),
-                )));
+      //  Future.delayed(Duration(seconds: 1), () =>  main());
+      //  _showRoutingScreen( 
+      //             WayPointInfo.withCoordinates(
+      //             coordinates:GeoCoordinates(37.7749, -122.4194),
+      //           )));
     });
+  }
+   Future<void> initUniLinks() async {
+    // Handle incoming links while the app is in the foreground
+    _sub = linkStream.listen((String? link) {
+      if (!mounted) return;
+      // Handle the link
+      print('Received link: $link');
+      if(link!=null){
+      handleLink(link);
+      }
+    }, onError: (err) {
+      // Handle error
+      print('Error receiving link: $err');
+    });
+
+    // Handle the initial link if the app is started by a link
+    try {
+      final initialLink = await getInitialLink();
+      // String initialLink = "arcOMDrive-app-ios://LandingScreen/?routeId=cad48ea9-acda-41e9-8ca1-7e8c901fa34e";
+      if (initialLink != null) {
+        print('Initial link: $initialLink');
+        handleLink(initialLink);
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => LandingScreen(itemId: itemId)));
+      }
+    } on PlatformException {
+      // Handle exception
+      print('Error getting initial link');
+    }
+  }
+    void handleLink(String link) {
+    // Parse the link and navigate accordingly
+    if (link != null) {
+      Uri uri = Uri.parse(link);
+        print('Handling link with path: ${link}');
+        String routeString = link.substring(44,);
+        print('substring: ${routeString}');
+
+        main();
+      // if (uri.scheme == 'arcOMDrive-app-ios') {
+        // Perform navigation or any other actions based on the link
+        // LandingScreen.navRoute: (BuildContext context) => LandingScreen();
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => LandingScreen()));
+      // }
+    }
   }
 
   @override
@@ -147,9 +208,14 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
                 options: options,
                 onMapCreated: _onMapCreated,
               ),
+              //  Text(
+              //   'Item ID: $routeIdParam',
+              //   style: TextStyle(fontSize: 20),
+              // ),
               // _onSearch(context),
               // _buildSearchSection(),
               _buildMenuButton(),
+           
               // _onSearch(context)
             ],
           ),
@@ -186,13 +252,13 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
       }
       _hereMapController.mapScene.enableFeatures({MapFeatures.buildingFootprints: MapFeatureModes.extrudedBuildingsAll});
       _hereMapController.mapScene.enableFeatures({MapFeatures.terrain: MapFeatureModes.terrain3d});
-      hereMapController.setWatermarkLocation(
-        Anchor2D.withHorizontalAndVertical(-1, 0),
-        Point2D(
-          -hereMapController.watermarkSize.width / 2,
-          -hereMapController.watermarkSize.height / 2,
-        ),
-      );
+      // hereMapController.setWatermarkLocation(
+      //   Anchor2D.withHorizontalAndVertical(-1, 0),
+      //   Point2D(
+      //     -hereMapController.watermarkSize.width / 2,
+      //     -hereMapController.watermarkSize.height / 2,
+      //   ),
+      // );
 
       _addGestureListeners();
 
@@ -360,7 +426,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
     customMapStyleSettings.reset();
     FileUtility.deleteScenesDirectory();
     _hereMapController.mapScene.loadSceneForMapScheme(
-      MapScheme.normalDay,
+      MapScheme.logisticsDay,
       (MapError? error) {
         if (error != null) {
           print('Map scene not loaded. MapError: ${error.toString()}');
@@ -728,4 +794,193 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
   void _updateConsentState(PositioningEngine positioningEngine) {
     setState(() => _consentState = positioningEngine.userConsentState);
   }
+
+  void main() async {
+  String jsonResponse = '''[{
+    "routeID": "cad48ea9-acda-41e9-8ca1-7e8c901fa34e",
+    "routeDayID": "d1524cbe-cb79-47f9-8df2-34da2067f17e",
+    "routeName": "PL 08 07",
+    "routeColor": "#117EC3",
+    "routeType": null,
+    "routeDate": "2024-07-08T00:00:00",
+    "routeStatus": "In-Transit",
+    "routeInCharge": null,
+    "originPointName": "Amazon Warehouse",
+    "orginaddress": "47 W 13th St,New York,New York,10011",
+    "orginlocationtype": "warehouse",
+    "destinationaddress": "47 W 13th St,New York,New York,10011",
+    "destinationlocationtype": "warehouse",
+    "destinationName": "Amazon Warehouse",
+    "routePlannedToStartOn": "2024-07-07T22:48:42.357",
+    "destinationDistance": 1000,
+    "destinationDuration": 224,
+    "destinationId": "f6154090-a70e-4e8b-a26f-679da447ca6f",
+    "destinationStopSequenceId": "bcd5ee37-834f-4826-af8e-19d31cd8fbc3",
+    "destinationExpectedDeliveryon": "2024-07-07T22:59:44",
+    "destinationCompletedOn": null,
+    "statusText": "Active",
+    "status": true,
+    "isActive": true,
+    "truck": {
+      "trucknum": "Truck1",
+      "truckname": "Truck1",
+      "trucktypename": "Long Truck"
+    },
+    "driver": {
+      "driverName": "Rico",
+      "driverID": null,
+      "mobileNumber": "9393999",
+      "emailID": "arcplatformdemouser@innospire.com"
+    },
+    "orders": [],
+    "salesOrderReturnProducts": [],
+    "inventoryOrders": [],
+    "wareHouseAddress": "47 W 13th St,New York,New York,10011",
+    "stops": [{
+        "id": "06877a96-04f8-4210-a96e-3c47e827c431",
+        "sequencedStopID": "06877a96-04f8-4210-a96e-3c47e827c431",
+        "routeDayID": null,
+        "stopID": "4c3f6b05-8bfa-4a54-b602-a18b28429bf3",
+        "stopName": "Arc Corp",
+        "type": "customer",
+        "sequence": 1,
+        "address": "75 3rd Ave,New York,New York,10003",
+        "expectedDeliveryOn": "2024-07-08T18:52:33.713",
+        "isCompleted": 0,
+        "reason": "",
+        "sequnceChangeReason": "",
+        "comments": "",
+        "isPickedUp": null,
+        "distance": 1334,
+        "duration": 497,
+        "completedOn": null,
+        "iscancelled": false,
+        "isDestination": false,
+        "avialbleStartTime": null,
+        "avialbleEndTime": null,
+        "isPartial": false
+    }],
+    "routeProducts": [{
+        "productID": "1eb6e4c5-7e33-4790-a3db-4058900b867f",
+        "warehouseID": "f6154090-a70e-4e8b-a26f-679da447ca6f",
+        "loadType": "",
+        "productName": "HP Laptop Bag",
+        "totaQty": 1,
+        "availableQty": 1,
+        "requiredQty": 1,
+        "soldQty": 0,
+        "isLoaded": true,
+        "price": 400,
+        "producttype": null,
+        "warehousename": "Amazon Warehouse",
+        "productnumber": "P1028"
+    }, {
+        "productID": "c806c302-ee5b-4077-9924-98a99c24db07",
+        "warehouseID": "f6154090-a70e-4e8b-a26f-679da447ca6f",
+        "loadType": "",
+        "productName": "LG French Door Refrigerator",
+        "totaQty": 1,
+        "availableQty": 1,
+        "requiredQty": 1,
+        "soldQty": 0,
+        "isLoaded": true,
+        "price": 2000,
+        "producttype": "Not Assigned",
+        "warehousename": "Amazon Warehouse",
+        "productnumber": "P1026"
+    }, {
+        "productID": "920fa6e5-3e2d-4dad-ad18-b700dee7472b",
+        "warehouseID": "f6154090-a70e-4e8b-a26f-679da447ca6f",
+        "loadType": "",
+        "productName": "Red velvet cake",
+        "totaQty": 1,
+        "availableQty": 1,
+        "requiredQty": 1,
+        "soldQty": 0,
+        "isLoaded": true,
+        "price": 200,
+        "producttype": "Not Assigned",
+        "warehousename": "Amazon Warehouse",
+        "productnumber": "P1057"
+    }],
+    "routeactualstarton": "2024-07-07T22:48:42.357",
+    "totalduration": 0,
+    "totaldistance": 0,
+    "routecompletedon": null,
+    "routeactualendon": null,
+    "createdon": "2024-07-07T22:47:47.54",
+    "locationtype": null,
+    "sodStatus": true,
+    "eodStatus": false,
+    "routeApproach": "product",
+    "invoiceOrders": [],
+    "returnOrders": []
+  }]''';
+
+  List<dynamic> jsonList = jsonDecode(jsonResponse);
+  List<Routes> routes = jsonList.map((json) => Routes.fromJson(json)).toList();
+
+  String routeID = routes[0].routeID;
+  debugPrint('Routtteteeeee Id $routeID');
+
+  print(routeID); // Example usage
+
+  // Incase of just a single object
+  //  Map<String, dynamic> jsonMap = jsonDecode(jsonResponse);
+  // String routeID = jsonMap['routeID'];
+  // print(routeID);  // Output: cad48ea9-acda-41e9-8ca1-7e8c901fa34e
+
+  // Make the API call
+  await makeGeocodeApiCall(routes[0].destinationAddress);
 }
+Future<void> makeGeocodeApiCall(String address) async {
+  const apiKey = 'dCw0lUcJGmY4HeYhP5rnjotqFnhDYYd205JfMrBmEvU';
+  final queryParameters = {
+    'q': address,
+    'apiKey': apiKey,
+  };
+
+  final uri = Uri.https('geocode.search.hereapi.com', '/v1/geocode', queryParameters);
+  debugPrint('uri value $uri');
+  final response = await http.get(uri);
+
+ if (response.statusCode == 200) {
+    final jsonResponse = jsonDecode(response.body);
+    final latLng = extractLatLngFromJson(jsonResponse);
+    if (latLng != null) {
+     double? lat = latLng['lat'];
+      double? lng = latLng['lng'];
+
+  if (lat != null && lng != null) {
+    var coordinates = GeoCoordinates(lat, lng);
+    print(coordinates.latitude); 
+    print(coordinates.longitude); 
+      _showRoutingScreen( 
+                  WayPointInfo.withCoordinates(
+                  coordinates:coordinates,
+                ));               
+  }
+    
+    } else {
+      print('Lat/Lng not found');
+    }
+  } else {
+    print('Failed to get geocode data: ${response.statusCode}');
+  }
+}
+Map<String, double>? extractLatLngFromJson(Map<String, dynamic> json) {
+  if (json.containsKey('items') && json['items'] is List && json['items'].isNotEmpty) {
+    final firstItem = json['items'][0];
+    if (firstItem.containsKey('access') && firstItem['access'] is List && firstItem['access'].isNotEmpty) {
+      final accessPoint = firstItem['access'][0];
+      return {
+        'lat': accessPoint['lat'],
+        'lng': accessPoint['lng'],
+      };
+    }
+  }
+  return null;
+}
+
+}
+

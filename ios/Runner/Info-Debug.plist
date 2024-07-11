@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>HERE SDK Ref App</string>
+	<string>ArcRoute</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -20,6 +20,19 @@
 	<string>$(FLUTTER_BUILD_NAME)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>com.flutter.arcOMDrive</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>arcOMDrive-app-ios</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -28,10 +41,10 @@
 	<array>
 		<string>_dartobservatory._tcp</string>
 	</array>
-	<key>NSLocationAlwaysUsageDescription</key>
-    <string>This app needs to access your location at all times to provide background updates during navigation.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>This app needs to access your current location to display it on the map.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>This app needs to access your location at all times to provide background updates during navigation.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs to access your current location to display it on the map.</string>
 	<key>NSMotionUsageDescription</key>

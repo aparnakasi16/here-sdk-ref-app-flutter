@@ -290,7 +290,7 @@ class _SearchPopupState extends State<_SearchPopup> {
 
     if (highlights == null) {
       result.add(TextSpan(
-        text: 'Alexi Saldamando',
+        text: text,
       ));
     } else {
       int lastPosition = 0;

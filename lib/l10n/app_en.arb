@@ -7,11 +7,11 @@
   "@allowHighwayTitle": {
     "description": "Route preferences switcher title"
   },
-  "appTitle": "ArcOMDriver",
+  "appTitle": "ArcRoute",
   "@appTitle": {
     "description": "Title of the Application"
   },
-  "appTitleHeader": "ArcOMDriver",
+  "appTitleHeader": "ArcRoute",
   "@appTitleHeader": {
     "description": "Title of the Application in the drawer header"
   },

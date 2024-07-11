@@ -17,6 +17,9 @@
  * License-Filename: LICENSE
  */
 
+import 'dart:async';
+import 'dart:io';
+
 import 'package:RefApp/environment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -28,7 +31,7 @@ import 'package:here_sdk/maploader.dart';
 import 'package:here_sdk/routing.dart' as Routing;
 import 'package:here_sdk/search.dart';
 import 'package:provider/provider.dart';
-
+import 'package:uni_links/uni_links.dart';
 import 'common/application_preferences.dart';
 import 'common/custom_map_style_settings.dart';
 import 'common/ui_style.dart';
@@ -45,6 +48,7 @@ import 'routing/waypoint_info.dart';
 import 'routing/waypoints_controller.dart';
 import 'search/recent_search_data_model.dart';
 import 'search/search_results_screen.dart';
+import 'package:flutter/services.dart' show PlatformException;
 
 /// The entry point of the application.
 void main() {
@@ -86,12 +90,63 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+    StreamSubscription? _sub;
+
+  @override
+  void initState() {
+    super.initState();
+    // initUniLinks();
+  }
+   Future<void> initUniLinks() async {
+    // Handle incoming links while the app is in the foreground
+    _sub = linkStream.listen((String? link) {
+      if (!mounted) return;
+      // Handle the link
+      print('Received link: $link');
+      if(link!=null){
+      handleLink(link);
+      }
+    }, onError: (err) {
+      // Handle error
+      print('Error receiving link: $err');
+    });
+
+    // Handle the initial link if the app is started by a link
+    try {
+      // final initialLink = await getInitialLink();
+      String initialLink = "arcOMDrive-app-ios://LandingScreen/?routeId=cad48ea9-acda-41e9-8ca1-7e8c901fa34e";
+      if (initialLink != null) {
+        print('Initial link: $initialLink');
+        handleLink(initialLink);
+        Navigator.push(context, MaterialPageRoute(builder: (context) => LandingScreen(routeIdParam:initialLink)));
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => LandingScreen(itemId: itemId)));
+      }
+    } on PlatformException {
+      // Handle exception
+      print('Error getting initial link');
+    }
+  }
+    void handleLink(String link) {
+    // Parse the link and navigate accordingly
+    if (link != null) {
+      Uri uri = Uri.parse(link);
+      // Example: arcOMDrive-app-ios.com/path
+      if (uri.scheme == 'arcOMDrive-app-ios') {
+        // Perform navigation or any other actions based on the link
+        print('Handling link with path: ${uri.path}');
+        // LandingScreen.navRoute: (BuildContext context) => LandingScreen();
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => LandingScreen()));
+      }
+    }
+  }
+
   @override
   void dispose() {
     SdkContext.release();
+     _sub?.cancel();
     super.dispose();
   }
-
+ 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -118,7 +173,7 @@ class _MyAppState extends State<MyApp> {
         onGenerateTitle: (BuildContext context) => AppLocalizations.of(context)!.appTitle,
         onGenerateRoute: (RouteSettings settings) {
           Map<String, WidgetBuilder> routes = {
-            LandingScreen.navRoute: (BuildContext context) => LandingScreen(),
+            LandingScreen.navRoute: (BuildContext context) => LandingScreen(routeIdParam: '',),
             SearchResultsScreen.navRoute: (BuildContext context) {
               List<dynamic> arguments = settings.arguments as List<dynamic>;
               assert(arguments.length == 4);
@@ -172,7 +227,7 @@ class _MyAppState extends State<MyApp> {
             settings: settings,
           );
         },
-        initialRoute: LandingScreen.navRoute,
+        // initialRoute: LandingScreen.navRoute,
       ),
     );
   }

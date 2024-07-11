@@ -110,14 +110,14 @@ class _RoutePreferencesScreenState extends State<RoutePreferencesScreen> with Ti
 extension _TransportModeOptionsExtension on TransportModes {
   Widget get getOptionsScreen {
     switch (this) {
-      case TransportModes.car:
-        return CarOptionsScreen();
+      // case TransportModes.car:
+      //   return CarOptionsScreen();
       case TransportModes.truck:
         return TruckOptionsScreen();
-      case TransportModes.scooter:
-        return ScooterOptionsScreen();
-      case TransportModes.walk:
-        return PedestrianOptionsScreen();
+      // case TransportModes.scooter:
+      //   return ScooterOptionsScreen();
+      // case TransportModes.walk:
+      //   return PedestrianOptionsScreen();
     }
   }
 }
