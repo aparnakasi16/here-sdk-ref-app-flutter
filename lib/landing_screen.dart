@@ -148,14 +148,48 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
         print('Handling link with path: ${link}');
         String routeString = link.substring(44,);
         print('substring: ${routeString}');
-
-        main();
+        getRouteDetailswithId(routeString);
+        // main();
       // if (uri.scheme == 'arcOMDrive-app-ios') {
         // Perform navigation or any other actions based on the link
         // LandingScreen.navRoute: (BuildContext context) => LandingScreen();
         // Navigator.push(context, MaterialPageRoute(builder: (context) => LandingScreen()));
       // }
     }
+  }
+
+  Future<void> getRouteDetailswithId(String id) async {
+  final queryParameters = {
+    'RoutedayId': id,
+    'Isliveroute':'true',
+  };
+    final headers = {
+    'tenant':'qa'
+  };
+
+  final uri = Uri.https('arcproducts-qa.archarina.com', '/ArcOrderManagement/api/api/v1/order/route/getplannedroutebyid', queryParameters);
+
+  // final uri = Uri.https('arcproducts-qa.archarina.com', '/ArcOrderManagement/api/api/v1/order/route/getplannedroutebyid', queryParameters);
+  debugPrint('uri value $uri');
+  final response = await http.get(uri, headers: headers);
+
+ if (response.statusCode == 200) {
+      // Parse the JSON data
+      final data = json.decode(response.body);
+      
+      // Assuming the response is a list of maps
+      if (data is List) {
+        for (var item in data) {
+          if (item is Map && item.containsKey('destinationaddress')) {
+            print('Destination Address: ${item['destinationaddress']}');
+              await makeGeocodeApiCall(item['destinationaddress']);
+          }
+        }
+      }
+    } else {
+      print('Failed to load data: ${response.statusCode}');
+    }
+  
   }
 
   @override
@@ -493,7 +527,7 @@ class _LandingScreenState extends State<LandingScreen> with Positioning, Widgets
                       builder: (_, snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.done:
-                            String title = 'ArcOMDriver';
+                            String title = 'BMobile Navigation';
                             return Expanded(
                               child: Text(
                                 title,
