@@ -19,13 +19,13 @@
 
 import 'dart:io';
 
-import 'package:RefApp/common/util.dart';
+import 'package:BMobileNavigation/common/util.dart';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-const String _methodChannelName = 'com.example.RefApp/foreground_service_channel';
+const String _methodChannelName = 'com.example.BMobileNavigation/foreground_service_channel';
 const String _methodChannelMethodName = 'openBatterySaverSettings';
 const String _methodChannelMethodArgument = 'battery_saver';
 

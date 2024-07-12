@@ -17,8 +17,8 @@
  * License-Filename: LICENSE
  */
 
-import 'package:RefApp/common/extensions/location_listener_extension.dart';
-import 'package:RefApp/common/utils/navigation/location_provider_interface.dart';
+import 'package:BMobileNavigation/common/extensions/location_listener_extension.dart';
+import 'package:BMobileNavigation/common/utils/navigation/location_provider_interface.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/location.dart';
 import 'package:here_sdk/navigation.dart';

@@ -20,13 +20,13 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:RefApp/common/battery_saver_utils.dart';
-import 'package:RefApp/common/notifications/android_notifications.dart';
-import 'package:RefApp/common/notifications/ios_notifications.dart';
-import 'package:RefApp/common/notifications/notifications_manager.dart';
-import 'package:RefApp/common/utils/navigation/location_provider_interface.dart';
-import 'package:RefApp/common/utils/navigation/location_utils.dart';
-import 'package:RefApp/common/utils/navigation/position_status_listener.dart';
+import 'package:BMobileNavigation/common/battery_saver_utils.dart';
+import 'package:BMobileNavigation/common/notifications/android_notifications.dart';
+import 'package:BMobileNavigation/common/notifications/ios_notifications.dart';
+import 'package:BMobileNavigation/common/notifications/notifications_manager.dart';
+import 'package:BMobileNavigation/common/utils/navigation/location_provider_interface.dart';
+import 'package:BMobileNavigation/common/utils/navigation/location_utils.dart';
+import 'package:BMobileNavigation/common/utils/navigation/position_status_listener.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

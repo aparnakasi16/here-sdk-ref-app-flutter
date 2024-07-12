@@ -19,7 +19,7 @@
 
 import 'dart:async';
 
-import 'package:RefApp/common/ui_style.dart';
+import 'package:BMobileNavigation/common/ui_style.dart';
 import 'package:flutter/material.dart';
 
 const int _toastDurationInMs = 3000;

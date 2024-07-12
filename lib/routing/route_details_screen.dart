@@ -17,8 +17,8 @@
  * License-Filename: LICENSE
  */
 
-import 'package:RefApp/common/extensions/geo_box_extensions.dart';
-import 'package:RefApp/common/util.dart';
+import 'package:BMobileNavigation/common/extensions/geo_box_extensions.dart';
+import 'package:BMobileNavigation/common/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:here_sdk/core.dart';

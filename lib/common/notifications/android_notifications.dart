@@ -17,14 +17,14 @@
  * License-Filename: LICENSE
  */
 
-import 'package:RefApp/common/file_utility.dart';
-import 'package:RefApp/common/notifications/notifications_manager.dart';
+import 'package:BMobileNavigation/common/file_utility.dart';
+import 'package:BMobileNavigation/common/notifications/notifications_manager.dart';
 import 'package:flutter/services.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class AndroidNotificationsManager implements NotificationsManager {
   static const MethodChannel _kAndroidServiceChannel = const MethodChannel(
-    "com.example.RefApp/foreground_service_channel",
+    "com.example.BMobileNavigation/foreground_service_channel",
   );
   static const String _kTitleParam = "title";
   static const String _kContentParam = "content";

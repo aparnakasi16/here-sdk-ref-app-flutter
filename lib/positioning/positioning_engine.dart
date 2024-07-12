@@ -20,7 +20,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:RefApp/common/device_info.dart';
+import 'package:BMobileNavigation/common/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/consent.dart';
 import 'package:here_sdk/core.dart';

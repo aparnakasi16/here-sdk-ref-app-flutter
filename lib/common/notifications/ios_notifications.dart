@@ -16,8 +16,8 @@
  * SPDX-License-Identifier: Apache-2.0
  * License-Filename: LICENSE
  */
-import 'package:RefApp/common/file_utility.dart';
-import 'package:RefApp/common/notifications/notifications_manager.dart';
+import 'package:BMobileNavigation/common/file_utility.dart';
+import 'package:BMobileNavigation/common/notifications/notifications_manager.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 const int _defaultNotificationId = 0;

@@ -19,8 +19,8 @@
 
 import 'dart:math';
 
-import 'package:RefApp/common/extensions/error_handling/routing_error_extension.dart';
-import 'package:RefApp/common/util.dart';
+import 'package:BMobileNavigation/common/extensions/error_handling/routing_error_extension.dart';
+import 'package:BMobileNavigation/common/util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/flutter_svg.dart';

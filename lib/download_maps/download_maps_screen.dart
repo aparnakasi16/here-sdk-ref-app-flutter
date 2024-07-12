@@ -19,8 +19,8 @@
 
 import 'dart:async';
 
-import 'package:RefApp/common/extensions/error_handling/map_loader_error_extension.dart';
-import 'package:RefApp/common/extensions/region_extensions.dart';
+import 'package:BMobileNavigation/common/extensions/error_handling/map_loader_error_extension.dart';
+import 'package:BMobileNavigation/common/extensions/region_extensions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:here_sdk/maploader.dart';

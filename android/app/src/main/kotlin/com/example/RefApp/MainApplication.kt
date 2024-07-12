@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.example.RefApp
+package com.example.BMobileNavigation
 
 import android.app.Application;
 

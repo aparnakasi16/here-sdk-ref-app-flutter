@@ -17,16 +17,16 @@
  * License-Filename: LICENSE
  */
 
-package com.example.RefApp
+package com.example.BMobileNavigation
 
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import com.example.RefApp.FlutterForegroundService
-import com.example.RefApp.FlutterForegroundService.Companion.START_FOREGROUND_ACTION
-import com.example.RefApp.FlutterForegroundService.Companion.STOP_FOREGROUND_ACTION
+import com.example.BMobileNavigation.FlutterForegroundService
+import com.example.BMobileNavigation.FlutterForegroundService.Companion.START_FOREGROUND_ACTION
+import com.example.BMobileNavigation.FlutterForegroundService.Companion.STOP_FOREGROUND_ACTION
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
@@ -35,8 +35,8 @@ import io.flutter.plugin.common.MethodChannel
 
 class MainActivity : FlutterActivity() {
     companion object {
-        const val FLUTTER_ENGINE_ID = "refAppFlutterEngine"
-        private const val CHANNEL = "com.example.RefApp/foreground_service_channel"
+        const val FLUTTER_ENGINE_ID = "BMobileNavigationFlutterEngine"
+        private const val CHANNEL = "com.example.BMobileNavigation/foreground_service_channel"
         private const val BATTERY_SAVER_INTENT_ACTION = "android.settings.BATTERY_SAVER_SETTINGS"
         private const val START_SERVICE = "startService"
         private const val STOP_SERVICE = "stopService"

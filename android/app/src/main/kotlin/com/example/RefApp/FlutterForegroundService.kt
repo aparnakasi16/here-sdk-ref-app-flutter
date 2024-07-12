@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-package com.example.RefApp
+package com.example.BMobileNavigation
 
 
 import android.annotation.SuppressLint
@@ -34,8 +34,8 @@ import androidx.core.app.ServiceCompat
 
 class FlutterForegroundService : Service() {
     companion object {
-        const val START_FOREGROUND_ACTION = "com.example.RefApp.flutter_foreground_service.action.start_foreground"
-        const val STOP_FOREGROUND_ACTION = "com.example.RefApp.flutter_foreground_service.action.stop_foreground"
+        const val START_FOREGROUND_ACTION = "com.example.BMobileNavigation.flutter_foreground_service.action.start_foreground"
+        const val STOP_FOREGROUND_ACTION = "com.example.BMobileNavigation.flutter_foreground_service.action.stop_foreground"
         const val NOTIFICATION_CHANNEL_ID = "flutter_channel_id"
         const val NOTIFICATION_CHANNEL_NAME = "flutter_foreground_service_channel"
         const val ONGOING_NOTIFICATION_ID = 1
@@ -83,9 +83,9 @@ class FlutterForegroundService : Service() {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && e is ForegroundServiceStartNotAllowedException) {
                         // App not in a valid state to start foreground service
                         // (e.g. started from bg)
-                        Log.e("RefApp FGS Not Allowed: ", e.message.toString())
+                        Log.e("BMobileNavigation FGS Not Allowed: ", e.message.toString())
                     } else {
-                        Log.e("RefApp", e.message + "")
+                        Log.e("BMobileNavigation", e.message + "")
                     }
                 }
             }

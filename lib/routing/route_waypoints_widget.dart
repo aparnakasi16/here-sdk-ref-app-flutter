@@ -17,7 +17,7 @@
  * License-Filename: LICENSE
  */
 
-import 'package:RefApp/common/draggable_popup_here_logo_helper.dart';
+import 'package:BMobileNavigation/common/draggable_popup_here_logo_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:here_sdk/core.dart';
 import 'package:here_sdk/mapview.dart';
